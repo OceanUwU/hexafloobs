@@ -32,6 +32,7 @@ func _input(event):
             flipped_this_drag = false
     if event is InputEventKey && event.pressed && event.scancode == CONTROLS[bit_index][1]:
         flip()
+        flipped_this_drag = false
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
     if event is InputEventMouseButton && mouse_down && event.pressed:

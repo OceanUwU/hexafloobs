@@ -26,6 +26,7 @@ func _input(event):
     
 func start_game():
     score = 0
+    update_score()
     floobs = []
     playing = true
     $ControlArea.start_game()
@@ -113,8 +114,6 @@ func game_over():
     playing = false
     ready_to_start = false
     $ControlArea/Best.update_best(score)
-    score = 0
-    update_score()
     $ControlArea.end_game()
     $DeathMenu.visible = true
     $DeathMenu.modulate.a = 1
