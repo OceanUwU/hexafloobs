@@ -12,6 +12,7 @@ var on = false
 var flipped_this_drag = false
 var mouse_down = false
 
+
 func init(new_bit_index):
     bit_index = new_bit_index
     $Sprite/ControlDisplay.text = CONTROLS[bit_index][0]
@@ -33,15 +34,15 @@ func _input(event):
         flip()
 
 func _on_Area2D_input_event(_viewport, event, _shape_idx):
-    if event is InputEventMouseButton && mouse_down:
+    if event is InputEventMouseButton && mouse_down && event.pressed:
         flip()
         
 func _on_Area2D_mouse_entered():
-    if mouse_down && !flipped_this_drag:
+    if mouse_down:
         flip()
 
 func flip():
-    if playing:
+    if playing && !flipped_this_drag:
         set_on(!on, true)
         flipped_this_drag = true
 

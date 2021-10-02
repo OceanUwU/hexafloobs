@@ -72,7 +72,7 @@ func _on_ControlArea_change_value(value):
             $Cannon/ShootyPart.rotation = -atan(($Cannon.position.x - floob.position.x) / ($Cannon.position.y - floob.position.y))
             
             var bullet = Bullet.instance()
-            bullet.get_node('Label').text = str(value)
+            bullet.get_node('Label').text = Globals.convert_to_hex(value)
             bullet.rotation = $Cannon/ShootyPart.rotation
             add_child(bullet)
             $Shoot.play()
