@@ -1,0 +1,144 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://Main.gd" type="Script" id=1]
+[ext_resource path="res://assets/bg.jpg" type="Texture" id=2]
+[ext_resource path="res://ControlArea.tscn" type="PackedScene" id=3]
+[ext_resource path="res://StartMenu.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Cannon.tscn" type="PackedScene" id=5]
+[ext_resource path="res://HexaFloob.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Bullet.tscn" type="PackedScene" id=7]
+[ext_resource path="res://DeathParticles.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/RobotoMono-Regular.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://assets/RobotoMono-Bold.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://Camera2D.gd" type="Script" id=11]
+[ext_resource path="res://assets/hit.mp3" type="AudioStream" id=12]
+[ext_resource path="res://assets/shoot.mp3" type="AudioStream" id=13]
+[ext_resource path="res://assets/lose.mp3" type="AudioStream" id=14]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 54.5596, -101.932, 0, 0, 0, 0, 350.67, -101.856 )
+}
+
+[sub_resource type="DynamicFont" id=2]
+size = 70
+font_data = ExtResource( 10 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 22
+font_data = ExtResource( 9 )
+
+[node name="Main" type="Node"]
+script = ExtResource( 1 )
+Floob = ExtResource( 6 )
+Bullet = ExtResource( 7 )
+DeathParticles = ExtResource( 8 )
+
+[node name="Background" type="TextureRect" parent="."]
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 440.0
+margin_top = -62.0
+margin_right = 2840.0
+margin_bottom = 1598.0
+rect_rotation = 90.0
+rect_scale = Vector2( 0.3, 0.3 )
+mouse_filter = 2
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FloobPath" type="Path2D" parent="."]
+curve = SubResource( 1 )
+
+[node name="FloobSpawnLocation" type="PathFollow2D" parent="FloobPath"]
+position = Vector2( 54.5596, -101.932 )
+rotation = 0.000258732
+
+[node name="ControlArea" parent="." instance=ExtResource( 3 )]
+
+[node name="StartMenu" parent="." instance=ExtResource( 4 )]
+
+[node name="Cannon" parent="." instance=ExtResource( 5 )]
+position = Vector2( 200.474, 600.04 )
+scale = Vector2( 0.4, 0.4 )
+z_index = 1
+
+[node name="FloobTimer" type="Timer" parent="."]
+
+[node name="DeathMenu" type="Control" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameOver" type="Label" parent="DeathMenu"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -9.0
+margin_top = 150.0
+margin_right = 369.0
+margin_bottom = 426.5
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.776471, 0.129412, 0.129412, 1 )
+text = "GAME OVER"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Restart" type="Label" parent="DeathMenu"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 89.0
+margin_top = 238.0
+margin_right = 271.0
+margin_bottom = 395.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0.776471, 0.129412, 0.129412, 1 )
+text = "TAP TO RESTART"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="DeathMenu"]
+
+[node name="Flash" type="CanvasLayer" parent="."]
+
+[node name="White" type="ColorRect" parent="Flash"]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="Flash/White"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+script = ExtResource( 11 )
+
+[node name="Hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+
+[node name="Shoot" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
+
+[node name="Lose" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+
+[connection signal="activated" from="ControlArea" to="." method="_on_ControlArea_activated"]
+[connection signal="change_value" from="ControlArea" to="." method="_on_ControlArea_change_value"]
+[connection signal="ready_to_start" from="StartMenu" to="." method="_on_StartMenu_ready_to_start"]
+[connection signal="timeout" from="FloobTimer" to="." method="_on_FloobTimer_timeout"]
